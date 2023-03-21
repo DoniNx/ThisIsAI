@@ -107,7 +107,6 @@ function trainModel({ text: sentence, score: sentenceScore }) {
             predictionAlgorithm(nextWord.word,count+1);
         }
 
-    
         
    }
 
@@ -120,6 +119,39 @@ function trainModel({ text: sentence, score: sentenceScore }) {
           if(inputWord != "" || inputWordIndex !== -1) {
                 predictionAlgorithm(inputWord, 0);
           }
+        }
+        else if(event.key == "Enter"){
+
+        let index;
+
+        let dataExists = trainingDataValue.find((ele, i)=>{
+            index = i;
+            return ele.text == textInput;
+        })
+
+   
+        if(dataExists){
+            trainingData.update(value => {
+                value[index].score++;
+                return value;
+            });
+        }else{
+            trainingData.update(value =>{
+                value.push({text: textInput.trim(), score: 1});
+                return value;
+            })
+        }  
+
+        //update the trainedData model 
+        trainModel(trainingDataValue[trainingDataValue.length-1]);
+
+
+
+
+
+
+
+
         }
    }
     
