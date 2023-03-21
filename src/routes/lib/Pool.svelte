@@ -110,10 +110,14 @@
         
      
         }
-        
+
 </script>
 
-<div class="pool flex flex-row flex-wrap gap-2 justify-center">
+
+<div 
+
+
+class="pool flex flex-row flex-wrap gap-2 justify-center">
     {#each dataPoolValue as data, i (i)}
         <div class="dataCard border w-fit max-w-[450px] flex flex-grow justify-between px-4 py-2 bg-slate-300 text-lg select-none">
             <h4>{data.text}</h4>

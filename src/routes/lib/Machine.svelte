@@ -156,22 +156,48 @@ function trainModel({ text: sentence, score: sentenceScore }) {
    }
     
    
-   $:{
-      if(textInput === ""){
-        predictedText = "";
-      }
-   }
+
+
+   let mouseOnBucket = false;
+   let clientX = 170;
+   let clientY = 150;
+   
 </script>
 
 
+{#if mouseOnBucket}
+<div style:transform={`translate(${clientX}px, ${clientY}px)`} class="hoverInfogra absolute border-2 border-slate-500 rounded-lg shadow-2xl bg-slate-100 w-48 z-20 px-2 py-1 transition duration-100 ease-in-out">
+  <h2 class="text-lg font-bold text-gray-600">Engineered</h2>
+  This is the component I want to conditionally rnder
+</div>
+{/if}
+
 <div class="machine border-[5px] border-gray-500/50 my-3 md:flex md:flex-row sm:flex sm:flex-col max-w-full">
-    <div class="dataBucket h-[250px] overflow-scroll flex-grow bottom-8 border-[6.5px] border-yellow-300 rounded-md m-3 select-none">
+  <div 
+    
+       on:mousemove={(event)=> {
+        
+        if(20+event.clientX+192 > window.innerWidth){
+          clientX = window.innerWidth-192;
+          clientY = event.clientY-20;
+        }else{
+          clientX = event.clientX+20;
+          clientY = event.clientY-20;
+        }
+        mouseOnBucket = true;
+       }}
+
+      on:mouseleave={()=>{ 
+        mouseOnBucket = false;
+        }}
+
+      class="dataBucket h-[250px] overflow-scroll flex-grow bottom-8 border-[6.5px] border-yellow-300 rounded-md m-3 select-none flex flex-col">
         
         {#if !trainingDataValue.length}
-            <div>Feed data to the model.</div>
+            <div class="self-center my-auto">Feed data to the model.</div>
         {:else}
             {#each trainingDataValue as sentence}
-                <div class="sentenceCard  bg-slate-300 text-lg px-3 py-2 my-2 mx-1 flex flex-row justify-between">
+                <div class="sentenceCard  bg-slate-300 text-lg px-3 py-2 my-1 mx-1 flex flex-row justify-between">
                     <h3>{sentence.text}</h3>
                     <p class="bg-slate-600/70 text-sm text-white font-bold rounded-full h-6 w-6  flex justify-center align-middle self-center place-items-center
                     ">{sentence.score}</p>
@@ -181,13 +207,46 @@ function trainModel({ text: sentence, score: sentenceScore }) {
         
     </div>
 
-    <div class="trainingModel m-4 bg-pink-500/40 rounded-lg flex-grow flex flex-col align-middle justify-center min-h-[180px]">
+    <div 
+    on:mousemove={(event)=> {
+        
+      if(20+event.clientX+192 > window.innerWidth){
+        clientX = window.innerWidth-192;
+        clientY = event.clientY-20;
+      }else{
+        clientX = event.clientX+20;
+        clientY = event.clientY-20;
+      }
+      mouseOnBucket = true;
+     }}
+
+    on:mouseleave={()=>{ 
+      mouseOnBucket = false;
+      }}
+    
+    class="trainingModel m-4 bg-pink-500/40 rounded-lg flex-grow flex flex-col align-middle justify-center min-h-[180px]">
         <button class="trainModelBtn bg-slate-500 text-white h-fit  w-fit py-1 px-4  rounded-sm self-center font-bold active:bg-yellow-300 active:text-black active:opacity-100   hover:opacity-90 transition ease-in-out  duration-150" on:click={trainModelTrigger}>
             Train Model
         </button>
     </div>
           
-    <div class="prediction flex-grow min-h-[180px]">
+    <div 
+    on:mousemove={(event)=> {
+      
+      if(20+event.clientX+192 > window.innerWidth){
+        clientX = window.innerWidth-200-(event.clientX/5);
+        clientY = event.clientY-20;
+      }else{
+        clientX = event.clientX+20;
+        clientY = event.clientY-20;
+      }
+      mouseOnBucket = true;
+     }}
+
+    on:mouseleave={()=>{ 
+      mouseOnBucket = false;
+      }}
+    class="prediction flex-grow min-h-[180px]">
 <input type="text" placeholder="text box..." class="textBox outline-none mt-9 ml-4 px-1 py-1 border-4 w-3/4 border-black" bind:value={textInput} 
                 on:keypress={predictionAlgorithmTrigger}> 
        <div class="px-4 mt-4 text-lg">
@@ -284,3 +343,9 @@ function trainModel({ text: sentence, score: sentenceScore }) {
     }
 }
 </style>  -->
+
+<!-- <style>
+ .hoverInfogra{
+    transform: translate(175px, 200px);
+ }
+</style> -->
