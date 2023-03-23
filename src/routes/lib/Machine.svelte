@@ -1,6 +1,9 @@
 <script>
-    import { text } from "svelte/internal";
-import {trainingData, trainedModelData} from "../../Store.js"
+  import {trainingData, trainedModelData} from "../../Store.js"
+	import DataBucketInfo from "./descriptions/DataBucketInfo.svelte";
+	import MachineInfo from "./descriptions/MachineInfo.svelte";
+	import TextBoxInfo from "./descriptions/TextBoxInfo.svelte";
+
     
     let trainingDataValue;
     let trainedModelDataValue;
@@ -106,7 +109,7 @@ function trainModel({ text: sentence, score: sentenceScore }) {
             predictedText = predictedText + " " + nextWord.word;
             predictionAlgorithm(nextWord.word,count+1);
         }
-
+        textInput = "";
         
    }
 
@@ -120,9 +123,10 @@ function trainModel({ text: sentence, score: sentenceScore }) {
                 predictionAlgorithm(inputWord, 0);
           }
         }
-        else if(event.key == "Enter"){
+        else if(event.key == "." && textInput != ""){
 
         let index;
+        
 
         let dataExists = trainingDataValue.find((ele, i)=>{
             index = i;
@@ -144,12 +148,7 @@ function trainModel({ text: sentence, score: sentenceScore }) {
 
         //update the trainedData model 
         trainModel(trainingDataValue[trainingDataValue.length-1]);
-
-
-
-
-
-
+        textInput = "";
 
 
         }
@@ -159,18 +158,24 @@ function trainModel({ text: sentence, score: sentenceScore }) {
 
 
    let mouseOnBucket = false;
+   let mouseOnMachine = false;
+   let mouseOnText = false;
    let clientX = 170;
    let clientY = 150;
    
 </script>
 
 
-{#if mouseOnBucket}
-<div style:transform={`translate(${clientX}px, ${clientY}px)`} class="hoverInfogra absolute border-2 border-slate-500 rounded-lg shadow-2xl bg-slate-100 w-48 z-20 px-2 py-1 transition duration-100 ease-in-out">
-  <h2 class="text-lg font-bold text-gray-600">Engineered</h2>
-  This is the component I want to conditionally rnder
-</div>
-{/if}
+<div class:dontDisplay={!mouseOnBucket && !mouseOnMachine && !mouseOnText }  style:transform={`translate(${clientX}px, ${clientY}px)`} class="hoverInfogra absolute border-2 border-slate-500 rounded-lg shadow-2xl bg-slate-100 w-52 z-20 px-2 py-1 transition duration-100 ease-in-out">  
+  {#if mouseOnBucket}
+    <DataBucketInfo />
+  {:else if mouseOnMachine}  
+    <MachineInfo />
+  {:else if mouseOnText}
+    <TextBoxInfo />
+  {/if}
+  </div>
+
 
 <div class="machine border-[5px] border-gray-500/50 my-3 md:flex md:flex-row sm:flex sm:flex-col max-w-full">
   <div 
@@ -217,11 +222,11 @@ function trainModel({ text: sentence, score: sentenceScore }) {
         clientX = event.clientX+20;
         clientY = event.clientY-20;
       }
-      mouseOnBucket = true;
+      mouseOnMachine = true;
      }}
 
     on:mouseleave={()=>{ 
-      mouseOnBucket = false;
+      mouseOnMachine = false;
       }}
     
     class="trainingModel m-4 bg-pink-500/40 rounded-lg flex-grow flex flex-col align-middle justify-center min-h-[180px]">
@@ -240,11 +245,11 @@ function trainModel({ text: sentence, score: sentenceScore }) {
         clientX = event.clientX+20;
         clientY = event.clientY-20;
       }
-      mouseOnBucket = true;
+      mouseOnText = true;
      }}
 
     on:mouseleave={()=>{ 
-      mouseOnBucket = false;
+      mouseOnText = false;
       }}
     class="prediction flex-grow min-h-[180px]">
 <input type="text" placeholder="text box..." class="textBox outline-none mt-9 ml-4 px-1 py-1 border-4 w-3/4 border-black" bind:value={textInput} 
@@ -256,96 +261,9 @@ function trainModel({ text: sentence, score: sentenceScore }) {
     </div>
 </div>
 
-<!-- 
+
 <style>
-    
-    .machine{
-        border: solid red 2px;
-        display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-        align-items: center;
-        justify-content: space-around;
-
-    }
-    .dataBucket{
-    
-        border: solid 2px pink;
-        border-radius: 6px;
-        width: fit-content;
-        height: 200px;
-        margin: 10px;
-        overflow: scroll;
-        flex-grow: 1;
-        font-family: sans-serif;
-
-    }
-    .trainingModel{
-        border: solid 2px rgba(255, 0, 0, 0.016);
-        border-radius: 6px;
-        background-color: rgba(255, 0, 0, 0.362);
-        width: 200px;
-        height: 200px;
-        margin: 10px;
-        display: flex;
-        flex-direction: col;
-        align-items: center;
-        justify-content: center;
-        flex-grow: 1;
-
-
-    }
-    .prediction{
-        border: solid 2px green;
-        width: 200px;
-       
-        height: 200px;
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        align-items: center;
-    }
-    .sentenceCard{
-        border: dashed 1px black;
-        padding: 0px 9px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .trainModelBtn{
-        border-radius: 0;
-        padding: 2px 11px;
-    }
-    .textBox{
-        margin: 10px auto;
-        width: 175px;
-    }
-
-    @media only screen and (max-width: 800px) {
-   
-        .machine{
-        border: solid red 2px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-
-    }
-    .prediction{
-        width: 90%;
-    }
-    .trainingModel{
-        width: 90%;
-    }
-    .dataBucket{
-        width: 90%;
-    }
-}
-</style>  -->
-
-<!-- <style>
- .hoverInfogra{
-    transform: translate(175px, 200px);
- }
-</style> -->
+  .dontDisplay{
+    display: none;
+  }
+</style>

@@ -4,7 +4,7 @@
     import "../style.css";
 </script>
 
-<div class="border-8 mt-1 border-black flex flex-col justify-center align-middle place-content-center place-items-center">
+<div class="mt-1 flex flex-col justify-center align-middle place-content-center place-items-center">
     <Header />
     <slot></slot>
     <Footer />
