@@ -109,7 +109,7 @@ function trainModel({ text: sentence, score: sentenceScore }) {
             predictedText = predictedText + " " + nextWord.word;
             predictionAlgorithm(nextWord.word,count+1);
         }
-        textInput = "";
+   
         
    }
 
